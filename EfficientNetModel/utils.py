@@ -4,7 +4,7 @@ from collections import namedtuple
 
 
 GlobalParams = namedtuple('GlobalParams', [
-    'width_coefficient', 'depth_coeffiecint', 'image_size', 'dropout_rate',
+    'width_coefficient', 'depth_coefficient', 'image_size', 'dropout_rate',
     'num_class', 'batch_norm_momentum', 'batch_norm_epsilon',
     'drop_connection_rate', 'depth_divisor', 'min_depth', 'include_top'
 ])
@@ -58,12 +58,9 @@ class BlockMaker:
         blocks_args = []
         for configs in blocks_args_configs:
             blocks_args.append(BlockMaker._build_block_args(configs))
-        return blocks_args
+        return blocks_args    
 
-def _build_blocks_args(blocks_args_configs):
-    
-
-def get_configs(model_name, num_class=10):
+def get_configs(model_name, num_class=10, include_top=True):
     
     params_dict = {
         # Coefficients:   width,depth,res,dropout
@@ -78,7 +75,8 @@ def get_configs(model_name, num_class=10):
         'efficientnet-b8': (2.2, 3.6, 672, 0.5),
         'efficientnet-l2': (4.3, 5.3, 800, 0.5),
     }
-    
+
+
     w, d, res, p = params_dict[model_name]
     
     blocks_args_configs = [
@@ -96,7 +94,7 @@ def get_configs(model_name, num_class=10):
     
     global_params = GlobalParams(
         width_coefficient=w,
-        depth_coeffiecint=d,
+        depth_coefficient=d,
         image_size=res,
         dropout_rate=p,
         drop_connection_rate=p,
