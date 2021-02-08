@@ -3,8 +3,9 @@ import torch
 
 class SAM(torch.optim.Optimizer):
     def __init__(self, params, base_optimizer, rho=0.05, **kwargs):
-        super().__init__()
-        self.base_optimizer= base_optimizer
+        defaults = dict(rho=rho, **kwargs)
+        super(SAM, self).__init__(params, defaults)
+        self.base_optimizer = base_optimizer(self.param_groups, **kwargs)
         self.param_groups = self.base_optimizer.param_groups
     
     @torch.no_grad()
