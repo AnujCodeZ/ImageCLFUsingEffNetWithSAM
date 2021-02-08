@@ -12,8 +12,8 @@ from Utils.step_lr import StepLR
 parser = argparse.ArgumentParser()
 parser.add_argument("--batch_size", default=32, type=int)
 parser.add_argument("--threads", default=4, type=int)
-parser.add_argument("--epochs", default=200, type=int)
-parser.add_argument("--learning_rate", default=1e-3, type=float)
+parser.add_argument("--epochs", default=20, type=int)
+parser.add_argument("--learning_rate", default=1e-1, type=float)
 parser.add_argument("--momentum", default=0.9, type=float)
 parser.add_argument("--weight_decay", default=5e-4, type=float)
 parser.add_argument("--rho", default=0.05, type=float)
@@ -46,7 +46,10 @@ for epoch in range(args.epochs):
         predictions = model(inputs)
         loss = criterion(predictions, targets)
         loss.backward()
-        optimizer.step()
+        optimizer.first_step()
+        
+        criterion(model(inputs), targets).backward()
+        optimizer.second_step()
         
         with torch.no_grad():
             correct = torch.argmax(predictions.data, 1) == targets
