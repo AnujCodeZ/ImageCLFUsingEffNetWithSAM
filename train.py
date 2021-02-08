@@ -27,7 +27,7 @@ blocks_args, global_params = get_configs(args.model_name)
 image_size = global_params.image_size
 
 dataset = Cifar10(args.batch_size, image_size, args.threads)
-model = EfficientNet(blocks_args, global_params)
+model = EfficientNet(blocks_args, global_params).to(device)
 log = Logger()
 
 base_optimizer = torch.optim.SGD
