@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 from math import ceil
 
-import config
-
 
 class CNNBlock(nn.Module):
     def __init__(
@@ -92,7 +90,7 @@ class InvertedResidualBlock(nn.Module):
 
 
 class EfficientNet(nn.Module):
-    def __init__(self, version, num_classes):
+    def __init__(self, version, num_classes, phi_values, base_model):
         super(EfficientNet, self).__init__()
         width_factor, depth_factor, dropout_rate = self.calculate_factors(version)
         last_channels = ceil(1280 * width_factor)
@@ -104,7 +102,7 @@ class EfficientNet(nn.Module):
         )
     
     def calculate_factors(self, version, alpha=1.2, beta=1.2):
-        phi, res, drop_rate = config.phi_values[version]
+        phi, res, drop_rate = phi_values[version]
         depth_factor = alpha ** phi
         width_factor = beta ** phi
         return width_factor, depth_factor, drop_rate
@@ -114,7 +112,7 @@ class EfficientNet(nn.Module):
         features = [CNNBlock(3, channels, 3, 2, 1)]
         in_channels = channels
         
-        for expand_ratio, channels, repeats, stride, kernel_size in config.base_model:
+        for expand_ratio, channels, repeats, stride, kernel_size in base_model:
             out_channels = 4 * ceil(int(channels * width_factor) / 4)
             layers_repeats = ceil(repeats * depth_factor)
             
@@ -140,16 +138,3 @@ class EfficientNet(nn.Module):
     def forward(self, x):
         x = self.pool(self.features(x))
         return self.classifier(x.view(x.shape[0], -1))
-    
-def test():
-    
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    version = 'b0'
-    phi, res, drop_rate = config.phi_values[version]
-    num_examples, num_classes = 4, 10
-    x = torch.randn((num_examples, 3, res, res)).to(device)
-    model = EfficientNet(version, num_classes).to(device)
-    
-    print(model(x).shape)
-
-test()

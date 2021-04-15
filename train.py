@@ -27,7 +27,8 @@ phi, image_size, drop_rate = config.phi_values[version]
 num_classes = 10
 
 dataset = Cifar10(args.batch_size, image_size, args.threads)
-model = EfficientNet(version, num_classes).to(device)
+model = EfficientNet(version, num_classes, 
+                     config.phi_values, config.base_model).to(device)
 log = Logger()
 
 base_optimizer = torch.optim.SGD
