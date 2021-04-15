@@ -2,7 +2,7 @@ import argparse
 import torch
 
 from EfficientNetSAM.efficientnet import EfficientNet
-import EfficientNetSAM.utils as utils
+import EfficientNetSAM.config as config
 from EfficientNetSAM.sam import SAM
 from Utils.data import Cifar10
 from Utils.logger import Logger
