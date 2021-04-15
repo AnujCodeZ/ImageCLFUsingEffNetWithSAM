@@ -12,19 +12,17 @@ having uniformly low loss; this formulation results in a min-max optimization pr
 > Using both can give state-of-the-art results. I implement them in a simple way on CIFAR-10 dataset.
 
 ## Usage:
-`python3 train.py --model_name <model you want to use>`
+`python3 train.py --version <version you want to use>`
 
 - List of models:
-    - 'efficientnet-b0'
-    - 'efficientnet-b1'
-    - 'efficientnet-b2'
-    - 'efficientnet-b3'
-    - 'efficientnet-b4'
-    - 'efficientnet-b5'
-    - 'efficientnet-b6'
-    - 'efficientnet-b7'
-    - 'efficientnet-b8'
-    - 'efficientnet-l2'
+    - 'b0'
+    - 'b1'
+    - 'b2'
+    - 'b3'
+    - 'b4'
+    - 'b5'
+    - 'b6'
+    - 'b7'
 
 ## Refrences:
 - Papers:
