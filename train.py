@@ -2,7 +2,7 @@ import argparse
 import torch
 
 from EfficientNetSAM.efficientnet import EfficientNet
-from EfficientNetSAM.utils import get_configs
+import EfficientNetSAM.utils as utils
 from EfficientNetSAM.sam import SAM
 from Utils.data import Cifar10
 from Utils.logger import Logger
@@ -17,17 +17,17 @@ parser.add_argument("--learning_rate", default=1e-1, type=float)
 parser.add_argument("--momentum", default=0.9, type=float)
 parser.add_argument("--weight_decay", default=5e-4, type=float)
 parser.add_argument("--rho", default=0.05, type=float)
-parser.add_argument("--model_name", default="efficientnet-b0", type=str)
+parser.add_argument("--version", default="b0", type=str)
 args = parser.parse_args()
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-blocks_args, global_params = get_configs(args.model_name)
-image_size = global_params.image_size
+phi, image_size, drop_rate = config.phi_values[version]
+num_classes = 10
 
 dataset = Cifar10(args.batch_size, image_size, args.threads)
-model = EfficientNet(blocks_args, global_params).to(device)
+model = EfficientNet(version, num_classes).to(device)
 log = Logger()
 
 base_optimizer = torch.optim.SGD
