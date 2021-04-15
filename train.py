@@ -23,6 +23,7 @@ args = parser.parse_args()
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+version = args.version
 phi, image_size, drop_rate = config.phi_values[version]
 num_classes = 10
 
