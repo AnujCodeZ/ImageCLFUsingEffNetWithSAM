@@ -92,6 +92,8 @@ class InvertedResidualBlock(nn.Module):
 class EfficientNet(nn.Module):
     def __init__(self, version, num_classes, phi_values, base_model):
         super(EfficientNet, self).__init__()
+        self.phi_values = phi_values
+        self.base_model = base_model
         width_factor, depth_factor, dropout_rate = self.calculate_factors(version)
         last_channels = ceil(1280 * width_factor)
         self.pool = nn.AdaptiveAvgPool2d(1)
@@ -102,7 +104,7 @@ class EfficientNet(nn.Module):
         )
     
     def calculate_factors(self, version, alpha=1.2, beta=1.2):
-        phi, res, drop_rate = phi_values[version]
+        phi, res, drop_rate = self.phi_values[version]
         depth_factor = alpha ** phi
         width_factor = beta ** phi
         return width_factor, depth_factor, drop_rate
@@ -112,7 +114,7 @@ class EfficientNet(nn.Module):
         features = [CNNBlock(3, channels, 3, 2, 1)]
         in_channels = channels
         
-        for expand_ratio, channels, repeats, stride, kernel_size in base_model:
+        for expand_ratio, channels, repeats, stride, kernel_size in self.base_model:
             out_channels = 4 * ceil(int(channels * width_factor) / 4)
             layers_repeats = ceil(repeats * depth_factor)
             
